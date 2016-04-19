@@ -497,6 +497,9 @@
 			case 'right':
 				styles.left = offset.left + width - popover.outerWidth();
 				break;
+			case 'center':
+				styles.left = offset.left + width / 2 - popover.outerWidth() / 2;
+				break;
 			case 'top':
 				styles.top = offset.top;
 				break;
