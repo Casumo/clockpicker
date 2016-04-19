@@ -415,6 +415,8 @@
 		fromnow: 0,		// set default time to * milliseconds from now (using with default = 'now')
 		placement: 'bottom',	// clock popover placement
 		align: 'left',		// popover arrow align
+		marginLeft: null,   // allows to set left margin
+		marginTop: null,    // allows to set top margin
 		donetext: '完成',	// done button text
 		autoclose: false,	// auto close when minute is selected
 		twelvehour: false,	// change to 12 hour AM/PM clock from 24 hour
@@ -423,7 +425,7 @@
 		minutestep: 1,		// allow to multi increment the minute
 		ampmSubmit: false,	// allow submit with AM and PM buttons instead of the minute selection/picker
 		addonOnly: false,	// only open on clicking on the input-addon
-		container: null		// allows to put the clockpicker inside a container
+		container: null    // allows to put the clockpicker inside a container
 	};
 
 	// Show or hide popover
@@ -452,6 +454,8 @@
 			height = element.outerHeight(),
 			placement = this.options.placement,
 			align = this.options.align,
+			marginLeft = this.options.marginLeft,
+			marginTop = this.options.marginTop,
 			styles = {},
 			self = this;
 
@@ -499,6 +503,14 @@
 			case 'bottom':
 				styles.top = offset.top + height - popover.outerHeight();
 				break;
+		}
+
+		if (marginLeft && styles.left) {
+			styles.left += marginLeft;
+		}
+
+		if (marginTop && styles.top) {
+			styles.top += marginTop;
 		}
 
 		popover.css(styles);
