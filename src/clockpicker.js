@@ -422,7 +422,8 @@
 		hourstep: 1,		// allow to multi increment the hour
 		minutestep: 1,		// allow to multi increment the minute
 		ampmSubmit: false,	// allow submit with AM and PM buttons instead of the minute selection/picker
-		addonOnly: false	// only open on clicking on the input-addon
+		addonOnly: false,	// only open on clicking on the input-addon
+		container: null		// allows to put the clockpicker inside a container
 	};
 
 	// Show or hide popover
@@ -544,7 +545,7 @@
 		// Initialize
 		if (! this.isAppended) {
 			// Append popover to body
-			$body = $(document.body).append(this.popover);
+			$body = $(this.options.container || document.body).append(this.popover);
 
 			// Reset position when resize
 			$win.on('resize.clockpicker' + this.id, function(){
