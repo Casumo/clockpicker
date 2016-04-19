@@ -140,8 +140,8 @@
 						}, duration / 2);
 					}
 				}).appendTo(this.amPmBlock);
-				
-				
+
+
 			$('<button type="button" class="btn btn-sm btn-default clockpicker-button pm-button">' + "PM" + '</button>')
 				.on("click", function() {
 					self.amOrPm = 'PM';
@@ -153,9 +153,9 @@
 						}, duration / 2);
 					}
 				}).appendTo(this.amPmBlock);
-				
+
 		}
-		
+
 		if (! options.autoclose) {
 			// If autoclose is not setted, append a button
 			$('<button type="button" class="btn btn-sm btn-default btn-block clockpicker-button">' + options.donetext + '</button>')
@@ -415,6 +415,8 @@
 		fromnow: 0,		// set default time to * milliseconds from now (using with default = 'now')
 		placement: 'bottom',	// clock popover placement
 		align: 'left',		// popover arrow align
+		marginLeft: null,   // allows to set left margin
+		marginTop: null,    // allows to set top margin
 		donetext: '完成',	// done button text
 		autoclose: false,	// auto close when minute is selected
 		twelvehour: false,	// change to 12 hour AM/PM clock from 24 hour
@@ -422,7 +424,8 @@
 		hourstep: 1,		// allow to multi increment the hour
 		minutestep: 1,		// allow to multi increment the minute
 		ampmSubmit: false,	// allow submit with AM and PM buttons instead of the minute selection/picker
-		addonOnly: false	// only open on clicking on the input-addon
+		addonOnly: false,	// only open on clicking on the input-addon
+		container: null    // allows to put the clockpicker inside a container
 	};
 
 	// Show or hide popover
@@ -451,6 +454,8 @@
 			height = element.outerHeight(),
 			placement = this.options.placement,
 			align = this.options.align,
+			marginLeft = this.options.marginLeft,
+			marginTop = this.options.marginTop,
 			styles = {},
 			self = this;
 
@@ -492,12 +497,23 @@
 			case 'right':
 				styles.left = offset.left + width - popover.outerWidth();
 				break;
+			case 'center':
+				styles.left = offset.left + width / 2 - popover.outerWidth() / 2;
+				break;
 			case 'top':
 				styles.top = offset.top;
 				break;
 			case 'bottom':
 				styles.top = offset.top + height - popover.outerHeight();
 				break;
+		}
+
+		if (marginLeft && styles.left) {
+			styles.left += marginLeft;
+		}
+
+		if (marginTop && styles.top) {
+			styles.top += marginTop;
 		}
 
 		popover.css(styles);
@@ -544,7 +560,7 @@
 		// Initialize
 		if (! this.isAppended) {
 			// Append popover to body
-			$body = $(document.body).append(this.popover);
+			$body = $(this.options.container || document.body).append(this.popover);
 
 			// Reset position when resize
 			$win.on('resize.clockpicker' + this.id, function(){
@@ -555,13 +571,13 @@
 
 			this.isAppended = true;
 		}
-		
+
 		// Get the time from the input field
 		this.parseInputValue();
-		
+
 		this.spanHours.html(leadingZero(this.hours));
 		this.spanMinutes.html(leadingZero(this.minutes));
-		
+
 		if (this.options.twelvehour) {
 			this.spanAmPm.empty().append(this.amOrPm);
 		}
@@ -790,7 +806,7 @@
 		var last = this.input.prop('value'),
 			outHours = this.hours,
 			value = ':' + leadingZero(this.minutes);
-		
+
 		if (this.isHTML5 && this.options.twelvehour) {
 			if (this.hours < 12 && this.amOrPm === 'PM') {
 				outHours += 12;
@@ -799,16 +815,16 @@
 				outHours = 0;
 			}
 		}
-		
+
 		value = leadingZero(outHours) + value;
-		
+
 		if (!this.isHTML5 && this.options.twelvehour) {
 			value = value + this.amOrPm;
 		}
-		
+
 		this.input.prop('value', value);
 		if (value !== last) {
-			this.input.triggerHandler('change');
+			this.input.trigger('change');
 			if (! this.isInput) {
 				this.element.trigger('change');
 			}

@@ -28,15 +28,9 @@ function js(prefix) {
 
 // Rename, concat and minify stylesheets
 function css(prefix) {
-	var stream;
-	if (prefix === 'bootstrap') {
-		stream = gulp.src('src/clockpicker.css');
-	} else {
-		// Concat with some styles picked from bootstrap
-		stream = gulp.src(['src/standalone.css', 'src/clockpicker.css'])
-			.pipe(concat('clockpicker.css'));
-	}
-	stream.pipe(rename({
+	gulp.src(['src/standalone.css', 'src/clockpicker.css'])
+		.pipe(concat('clockpicker.css'))
+		.pipe(rename({
 			prefix: prefix + '-'
 		}))
 		.pipe(replace(versionRegExp, version))
@@ -51,12 +45,10 @@ function css(prefix) {
 }
 
 gulp.task('js', function() {
-	js('bootstrap');
 	js('jquery');
 });
 
 gulp.task('css', function() {
-	css('bootstrap');
 	css('jquery');
 });
 
